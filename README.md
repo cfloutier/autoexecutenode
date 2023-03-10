@@ -28,13 +28,14 @@ https://spacedock.info/mod/3277/BepInEx%20Space%20Warp%20Plugin
 Download AutoExecuteNode, open the zip file, and drag the included `SpaceWarp` folder into the game folder.
 If there's already a `SpaceWarp` folder you should merge the folders.
 
-
 # Thanks to
 
-* big Thanks to @cheese3660 for [SpaceWarp](https://github.com/Halbann)  and for [AutoBurn](https://github.com/cheese3660/AutoBurn)
+* Big Thanks to [cheese3660](https://github.com/cheese3660) for [SpaceWarp](https://github.com/Halbann) and for [AutoBurn](https://github.com/cheese3660/AutoBurn)
+
+Very helpful code about how to start thrusts and how to get maneuvre node.
 
 * my first steps was based on [LazyOrbit](https://github.com/Halbann/LazyOrbit)
-Thanks for this excellent first step !
+Thanks for this excellent first step ! a light code, simple and very well written.
 
 # License
 
