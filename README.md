@@ -31,12 +31,10 @@ If there's already a `SpaceWarp` folder you should merge the folders.
 
 # Thanks to
 
-based on LazyOrbit : https://github.com/SpaceWarpDev/SpaceWarp
+* big Thanks to @cheese3660 for [SpaceWarp](https://github.com/Halbann)  and for [AutoBurn](https://github.com/cheese3660/AutoBurn)
 
-tnaks for this excellent first step
-
-- [Halban](https://github.com/Halbann)
-- [XYZ3211](https://github.com/XYZ3211)
+* my first steps was based on [LazyOrbit](https://github.com/Halbann/LazyOrbit)
+Thanks for this excellent first step !
 
 # License
 
