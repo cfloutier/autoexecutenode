@@ -8,11 +8,7 @@ set ZIP_File=%PROJECT_NAME%.zip
 
 echo %ZIP_File%
 
-set DEST_PATH="D:\SteamLibrary\steamapps\common\Kerbal Space Program 2\BepInEx\plugins\%PROJECT_NAME%"
-
 echo off
-
-echo dest path is : %DEST_PATH%
 
 @REM create local dir
 if not exist %OUTPUT% mkdir %OUTPUT%
@@ -31,10 +27,9 @@ copy /Y icon.png %LOCAL_DIR%\assets\images
 
 copy /Y %PROJECT_NAME%\obj\%CONFIG%\%PROJECT_NAME%.dll %LOCAL_DIR%
 
-
 set CWD=%cd%
 
-rm %ZIP_File%
+del %ZIP_File%
 
 cd %OUTPUT%
 
@@ -42,8 +37,14 @@ cd %OUTPUT%
 
 cd %CWD%
 
-@REM Copy to target
+echo Copy to target Ksp dir
+echo on
+
+set DEST_PATH="D:\SteamLibrary\steamapps\common\Kerbal Space Program 2\BepInEx\plugins\%PROJECT_NAME%"
+echo dest path is : %DEST_PATH%
+
 rd /s/q %DEST_PATH%
+mkdir  %DEST_PATH%
 if not exist %DEST_PATH% mkdir %DEST_PATH%
 xcopy /s /d %LOCAL_DIR% %DEST_PATH%
 

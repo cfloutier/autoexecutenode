@@ -64,7 +64,7 @@ namespace AutoExecuteNode
         private static bool ValidScene => validScenes.Contains(GameManager.Instance.Game.GlobalGameState.GetState());
 
 
-        TestUI main_ui;
+        MainUI main_ui;
         AutoExecuteManeuver auto_execute_maneuver;
 
         #endregion
@@ -88,7 +88,7 @@ namespace AutoExecuteNode
 
             logger.LogMessage("building AutoExecuteManeuver");
             auto_execute_maneuver = new AutoExecuteManeuver(logger);
-            main_ui = new TestUI(logger);
+            main_ui = new MainUI(logger);
 
             Appbar.RegisterAppButton(
                 "TEST",
@@ -100,12 +100,16 @@ namespace AutoExecuteNode
         void Awake()
         {
             windowRect = new Rect((Screen.width * 0.7f) - (windowWidth / 2), (Screen.height / 2) - (windowHeight / 2), 0, 0);
+            LoadSettings();
         }
 
         void Update()
         {
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.D) && ValidScene)
                 ToggleButton(!drawUI);
+
+            if (auto_execute_maneuver != null)
+                auto_execute_maneuver.Update();
         }
 
         void OnGUI()
@@ -166,11 +170,10 @@ namespace AutoExecuteNode
         }
 
         #endregion
-
     }
 
     public class AutoExecuteNodeSettings
     {
-        public InterfaceMode defaultMode = InterfaceMode.Main;
+        public MainUI.InterfaceMode defaultMode = MainUI.InterfaceMode.ExeNode;
     }
 }

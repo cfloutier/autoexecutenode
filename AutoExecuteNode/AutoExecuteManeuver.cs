@@ -69,6 +69,17 @@ namespace AutoExecuteNode
             GUILayout.Label($"CurrentRateIndex {time_warp.CurrentRateIndex}");
         }
 
+        public void Update()
+        {
+            // logger.LogInfo("AutoExecuteManeuver Update");
+
+            
+
+
+
+
+        }
+
         void Run()
         {
             active = !active;
