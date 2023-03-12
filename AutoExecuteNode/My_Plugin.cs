@@ -140,8 +140,8 @@ namespace AutoExecuteNode
         {
             GUILayout.BeginVertical();
 
-            if (GUI.Button(new Rect(windowRect.width - 18, 2, 16, 16), "x"))
-                AutoExecuteNode.Instance.ToggleButton(false);
+            if (GUI.Button(new Rect(windowRect.width - 18, 2, 16, 16), "X"))
+                ToggleButton(false);
 
             main_ui.onGui();
 

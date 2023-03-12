@@ -10,6 +10,8 @@ echo %ZIP_File%
 
 echo off
 
+echo ####################### make zip #######################
+
 @REM create local dir
 if not exist %OUTPUT% mkdir %OUTPUT%
 
@@ -37,29 +39,4 @@ cd %OUTPUT%
 
 cd %CWD%
 
-echo Copy to target Ksp dir
-echo on
-
-set DEST_PATH="D:\SteamLibrary\steamapps\common\Kerbal Space Program 2\BepInEx\plugins\%PROJECT_NAME%"
-echo dest path is : %DEST_PATH%
-
-rd /s/q %DEST_PATH%
-mkdir  %DEST_PATH%
-if not exist %DEST_PATH% mkdir %DEST_PATH%
-xcopy /s /d %LOCAL_DIR% %DEST_PATH%
-
-
-@REM @REM create bin dir
-@REM if not exist %DEST_PATH%/bin mkdir %DEST_PATH%/bin
-
-@REM copy /Y LICENSE.md %DEST_PATH%\
-@REM copy /Y modInfo.json %DEST_PATH%\
-@REM copy /Y README.md %DEST_PATH%\
-
-@REM copy /Y icon.png %DEST_PATH%\bin
-@REM copy /Y AutoExecuteNode/obj\%CONFIG%\%PROJECT_NAME%.dll %DEST_PATH%\bin
-
-@REM echo end
-@REM @REM pause
-
-
+dir

@@ -20,7 +20,6 @@ namespace AutoExecuteNode
 {
 
 
-
     public class MainUI
     {
         public ManualLogSource logger;
@@ -41,9 +40,11 @@ namespace AutoExecuteNode
             set
             {
                 if (value == AutoExecuteNode.settings.defaultMode) return;
-
+                // logger.LogInfo("Value is different to " + AutoExecuteNode.settings.defaultMode);
+                logger.LogInfo("InterfaceMode set " + value);
                 AutoExecuteNode.settings.defaultMode = value;
-                AutoExecuteNode.Instance.SaveSetting();
+
+                //AutoExecuteNode.Instance.SaveSetting();
             }
         }
 
@@ -60,7 +61,7 @@ namespace AutoExecuteNode
             if (!guiLoaded)
                 GetStyles();
 
-            if (Tools.active_vessel() == null)
+            if (VesselInfos.CurrentVessel() == null)
             {
                 GUILayout.FlexibleSpace();
                 GUILayout.Label("No active vessel.", errorStyle);
@@ -68,7 +69,7 @@ namespace AutoExecuteNode
                 return;
             }
 
-            if (Tools.current_body() == null)
+            if (VesselInfos.CurrentBody() == null)
             {
                 GUILayout.FlexibleSpace();
                 GUILayout.Label("No active body.", errorStyle);
@@ -78,13 +79,15 @@ namespace AutoExecuteNode
             }
             GUILayout.BeginVertical();
 
-            GUILayout.Label($"Active Vessel: {Tools.active_vessel()}");
-            GUILayout.Label($"body : {Tools.current_body()}");
+            // GUILayout.Label($"Active Vessel: {VesselInfos.CurrentVessel()}");
+            // GUILayout.Label($"body : {VesselInfos.CurrentBody()}");
 
             // Mode selection.
-            GUILayout.BeginHorizontal();
-            CurrentInterfaceMode = (InterfaceMode)GUILayout.SelectionGrid((int)CurrentInterfaceMode, interfaceModes, 4);
-            GUILayout.EndHorizontal();
+            // GUILayout.BeginHorizontal();
+            // CurrentInterfaceMode = (InterfaceMode)GUILayout.SelectionGrid((int)CurrentInterfaceMode, interfaceModes, 4);
+            // GUILayout.EndHorizontal();
+
+            CurrentInterfaceMode = InterfaceMode.ExeNode;
 
             // GUILayout.EndVertical();
 
@@ -106,9 +109,7 @@ namespace AutoExecuteNode
 
             GUILayout.EndVertical();
 
-
-
-           // GUI.DragWindow(new Rect(0, 0, 10000, 500));
+            GUI.DragWindow(new Rect(0, 0, 10000, 500));
         }
 
         private void GetStyles()
@@ -128,9 +129,9 @@ namespace AutoExecuteNode
             guiLoaded = true;
         }
 
-        void SASInfos()
+        public static void SASInfos()
         {
-            var sas = Tools.active_vessel().Autopilot.SAS;
+            var sas = VesselInfos.CurrentVessel().Autopilot.SAS;
             if (sas == null)
             {
                 GUILayout.Label("NO SAS");
@@ -143,16 +144,18 @@ namespace AutoExecuteNode
             GUILayout.Label($"sas.lockedMode {sas.lockedMode}");
             GUILayout.Label($"sas.LockedRotation {Tools.print_vector(sas.LockedRotation.eulerAngles)}");
 
-
             GUILayout.Label($"sas.TargetOrientation {Tools.print_vector(sas.TargetOrientation)}");
             GUILayout.Label($"sas.PidLockedPitch {sas.PidLockedPitch}");
             GUILayout.Label($"sas.PidLockedRoll {sas.PidLockedRoll}");
             GUILayout.Label($"sas.PidLockedYaw {sas.PidLockedYaw}");
+
+            
+
         }
 
         void VesselInfo()
         {
-            var vehicle = Tools.active_vessel_vehicle();
+            var vehicle = VesselInfos.CurrentVehicle();
 
             if (vehicle == null)
             {
@@ -161,27 +164,22 @@ namespace AutoExecuteNode
             }
 
             GUILayout.Label($"mainThrottle {vehicle.mainThrottle}");
-            GUILayout.Label($"pitch {vehicle.pitch:n2} yaw {vehicle.yaw:n2} roll {vehicle.roll}");
+            GUILayout.Label($"pitch {vehicle.pitch:n3} yaw {vehicle.yaw:n3} roll {vehicle.roll:n3}");
 
             GUILayout.Label($"AltitudeFromTerrain {vehicle.AltitudeFromTerrain:n2}");
             GUILayout.Label($"Lat {vehicle.Latitude:n2} Lon {vehicle.Longitude:n2}");
             GUILayout.Label($"IsInAtmosphere {vehicle.IsInAtmosphere}");
             GUILayout.Label($"LandedOrSplashed {vehicle.LandedOrSplashed}");
 
-            GUILayout.Label($"rotation {vehicle.Rotation}");
 
+            var body = VesselInfos.CurrentBody();
+            var coord = body.coordinateSystem;
+            var body_location = Rotation.Reframed(vehicle.Rotation, coord);
 
+            GUILayout.Label($"coordinate_system {vehicle.Rotation.coordinateSystem}");
+            GUILayout.Label($"body_location {Tools.print_vector(body_location.localRotation.eulerAngles)}");
 
-
-
-
-            // 
             // GUILayout.Label($"AngularMomentum {Tools.print_vector(vehicle.AngularMomentum.vector)}");
-
-
-
-
-
         }
     }
 }
