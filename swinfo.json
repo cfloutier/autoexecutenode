@@ -4,7 +4,7 @@
     "author": "cfloutier",
     "description": "A TEST GUI keybind is ALT+D.",
     "source": "link_to_github_if_you_want",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "dependencies": [],
     "ksp2_version": {
         "min": "0.1.0",

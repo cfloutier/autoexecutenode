@@ -31,7 +31,7 @@ namespace AutoExecuteNode
 
         public const string ModGuid = "AutoExecuteNode";
         public const string ModName = "AutoExecuteNode";
-        public const string ModVer = "0.0.0";
+        public const string ModVer = "0.1.0";
 
         #region Fields
 
