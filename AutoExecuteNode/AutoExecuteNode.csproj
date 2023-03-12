@@ -16,7 +16,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -79,7 +79,12 @@
     <Compile Include="Tools.cs" />
     <Compile Include="MainUI.cs" />
     <Compile Include="AutoExecuteManeuver.cs" />
+    <Compile Include="sub_pilots\TurnToManeuvre.cs" />
+    <Compile Include="sub_pilots\WarpToManeuvre.cs" />
+    <Compile Include="sub_pilots\BurnManeuvre.cs" />
+
     <Compile Include="Properties\AssemblyInfo.cs" />
+
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -95,16 +100,11 @@ cd $(ProjectDir)\..
 call make_zip.bat
 call copy_to_ksp.bat
 
-<!-- SET KSP2=D:\SteamLibrary\steamapps\common\Kerbal Space Program 2 -->
-<!-- start "" "D:\SteamLibrary\steamapps\common\Kerbal Space Program 2\KSP2_x64.exe" -->
-
-<!--
-
+SET KSP2=D:\SteamLibrary\steamapps\common\Kerbal Space Program 2
 
 copy /Y "$(TargetDir)$(ProjectName).dll" "%KSP2%\BepInEx\plugins\$(ProjectName)\$(ProjectName).dll"
-copy /Y "$(TargetDir)$(Targetname).pdb" "%KSP2%\BepInEx\plugins\$(ProjectName)" -->
+copy /Y "$(TargetDir)$(Targetname).pdb" "%KSP2%\BepInEx\plugins\$(ProjectName)"
 
-
-    </PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

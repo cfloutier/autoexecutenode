@@ -61,7 +61,12 @@ namespace AutoExecuteNode
 
         private static GameState[] validScenes = new[] { GameState.FlightView, GameState.Map3DView };
 
-        private static bool ValidScene => validScenes.Contains(GameManager.Instance.Game.GlobalGameState.GetState());
+        private static bool ValidScene()
+        {
+            if (Tools.Game() == null) return false;
+            var state = Tools.Game().GlobalGameState.GetState();
+            return validScenes.Contains(state);
+        }
 
 
         MainUI main_ui;
@@ -105,16 +110,19 @@ namespace AutoExecuteNode
 
         void Update()
         {
-            if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.D) && ValidScene)
-                ToggleButton(!drawUI);
+            if (ValidScene())
+            {
+                if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.D) )
+                    ToggleButton(!drawUI);
 
-            if (auto_execute_maneuver != null)
-                auto_execute_maneuver.Update();
+                if (auto_execute_maneuver != null)
+                    auto_execute_maneuver.Update();
+            }
         }
 
         void OnGUI()
         {
-            if (drawUI && ValidScene)
+            if (drawUI && ValidScene())
             {
                 GUI.skin = Skins.ConsoleSkin;
 

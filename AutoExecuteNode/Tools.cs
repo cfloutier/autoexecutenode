@@ -23,12 +23,12 @@ namespace AutoExecuteNode
     public class Tools
     {
 
-        static public string print_vector(Vector3d vec)
+        static public string printVector(Vector3d vec)
         {
             return $"{vec.x:n2} {vec.y:n2} {vec.z:n2}";
         }
 
-        static public string print_duration(double secs)
+        static public string printDuration(double secs)
         {
             if (secs < 0)
             {
@@ -55,11 +55,12 @@ namespace AutoExecuteNode
 
         static public KSP.Game.GameInstance Game()
         {
+            if (GameManager.Instance == null) return null;
             return GameManager.Instance.Game;
         }
 
 
-        public static Vector3d correct_euler(Vector3d euler)
+        public static Vector3d correctEuler(Vector3d euler)
         {
             Vector3d result = euler;
             if (result.x > 180)
@@ -90,6 +91,23 @@ namespace AutoExecuteNode
             return dt;
         }
 
+
+        public static ManeuverNodeData getNextManeuveurNode()
+        {
+            var game = GameManager.Instance?.Game;
+            if (game == null) return null;
+
+            var manoeuvers = game.SpaceSimulation?.Maneuvers;
+            if (manoeuvers == null) return null;
+
+            var current_vehicle = VesselInfos.currentVehicle();
+            if (current_vehicle == null) return null;
+
+            var activeNodes = manoeuvers.GetNodesForVessel(current_vehicle.Guid);
+            ManeuverNodeData next_node = (activeNodes.Count() > 0) ? activeNodes[0] : null;
+            return next_node;
+        }
+
     }
 
     public class Reflex
@@ -115,58 +133,59 @@ namespace AutoExecuteNode
 
     public class SASInfos
     {
-        public static VesselAutopilot current_autoPilot()
+        public static VesselAutopilot currentAutoPilot()
         {
-            return VesselInfos.CurrentVessel().Autopilot;
+            return VesselInfos.currentVessel()?.Autopilot;
         }
 
-        public static VesselSAS current_sas()
+        public static VesselSAS currentSas()
         {
-            return VesselInfos.CurrentVessel().Autopilot.SAS;
+            return VesselInfos.currentVessel()?.Autopilot?.SAS;
         }
 
         public static double getSasResponsePC()
         {
-            if (current_sas() == null)
+            if (currentSas() == null)
                 return 0;
 
 
-            var my_obj = Reflex.GetInstanceField(typeof(VesselSAS), current_sas(), "sasResponse");
+            var my_obj = Reflex.GetInstanceField(typeof(VesselSAS), currentSas(), "sasResponse");
             return  ((Vector3d) my_obj).magnitude * 100;
         }
 
         public static Vector3d geSASAngularDelta()
         {
-            if (current_sas() == null)
+            if (currentSas() == null)
                 return Vector3d.zero;
 
-            var my_obj = Reflex.GetInstanceField(typeof(VesselSAS), current_sas(), "angularDelta");
-            return Tools.correct_euler(((Vector3d)  my_obj));
+            var my_obj = Reflex.GetInstanceField(typeof(VesselSAS), currentSas(), "angularDelta");
+            return Tools.correctEuler(((Vector3d)  my_obj));
         }
     }
 
 
     class VesselInfos
     {
-        static public VesselComponent CurrentVessel()
+        static public VesselComponent currentVessel()
         {
-            return Tools.Game().ViewController.GetActiveSimVessel();
+            return Tools.Game().ViewController?.GetActiveSimVessel();
         }
-        static public VesselVehicle CurrentVehicle()
+        static public VesselVehicle currentVehicle()
         {
+            if (Tools.Game().ViewController == null) return null;
             if (!Tools.Game().ViewController.TryGetActiveVehicle(out var vehicle)) return null;
             return vehicle as VesselVehicle;
         }
 
-        static public CelestialBodyComponent CurrentBody()
+        static public CelestialBodyComponent currentBody()
         {
-            if (CurrentVessel() == null) return null;
-            return CurrentVessel().mainBody;
+            if (currentVessel() == null) return null;
+            return currentVessel().mainBody;
         }
 
         public static void SetThrottle(float throttle)
         {
-            var active_Vehicle = CurrentVehicle();
+            var active_Vehicle = currentVehicle();
             if (active_Vehicle == null) return;
 
             var update = new FlightCtrlStateIncremental
@@ -179,7 +198,7 @@ namespace AutoExecuteNode
 
         public static Vector GetAngularSpeed()
         {
-            var active_Vehicle = CurrentVehicle();
+            var active_Vehicle = currentVehicle();
             return active_Vehicle.AngularVelocity.relativeAngularVelocity;
         }
 
@@ -191,9 +210,12 @@ namespace AutoExecuteNode
 
     public class TimeWarpTools
     {
-        public static TimeWarp time_warp() { return GameManager.Instance.Game.ViewController.TimeWarp; }
+        public static TimeWarp time_warp()
+        {
+            return GameManager.Instance?.Game?.ViewController?.TimeWarp;
+        }
 
-        public static float index_to_ratio(int index)
+        public static float indexToRatio(int index)
         {
             var levels = time_warp().GetWarpRates();
             if (index < 0 || index >= levels.Length) return 0f;
@@ -201,7 +223,7 @@ namespace AutoExecuteNode
             return levels[index].TimeScaleFactor;
         }
 
-        public static int ratio_to_index(float ratio)
+        public static int ratioToIndex(float ratio)
         {
             var levels = time_warp().GetWarpRates();
             for (int index = 0; index < levels.Length; index++ )

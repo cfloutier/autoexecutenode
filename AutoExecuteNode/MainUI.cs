@@ -1,24 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
 
 using UnityEngine;
-
-
 using KSP.Sim;
-using KSP.Sim.impl;
-using KSP.Sim.Maneuver;
-using KSP.Game;
-using KSP.Sim.ResourceSystem;
-
-using SpaceWarp.API.UI;
-
 using BepInEx.Logging;
-using KSP.Messages.PropertyWatchers;
-
 
 namespace AutoExecuteNode
 {
-
 
     public class MainUI
     {
@@ -61,7 +47,7 @@ namespace AutoExecuteNode
             if (!guiLoaded)
                 GetStyles();
 
-            if (VesselInfos.CurrentVessel() == null)
+            if (VesselInfos.currentVessel() == null)
             {
                 GUILayout.FlexibleSpace();
                 GUILayout.Label("No active vessel.", errorStyle);
@@ -69,7 +55,7 @@ namespace AutoExecuteNode
                 return;
             }
 
-            if (VesselInfos.CurrentBody() == null)
+            if (VesselInfos.currentBody() == null)
             {
                 GUILayout.FlexibleSpace();
                 GUILayout.Label("No active body.", errorStyle);
@@ -77,6 +63,7 @@ namespace AutoExecuteNode
 
                 return;
             }
+
             GUILayout.BeginVertical();
 
             // GUILayout.Label($"Active Vessel: {VesselInfos.CurrentVessel()}");
@@ -97,7 +84,7 @@ namespace AutoExecuteNode
             {
                 case InterfaceMode.ExeNode:
                     if (AutoExecuteManeuver.Instance != null)
-                        AutoExecuteManeuver.Instance.GUI();
+                        AutoExecuteManeuver.Instance.onGUI();
                     else
                         logger.LogError("Missing AutoExecuteManeuver");
                     break;
@@ -105,9 +92,10 @@ namespace AutoExecuteNode
                 case InterfaceMode.Vessel: VesselInfo(); break;
                 default:
                     break;
-            } 
+            }
 
             GUILayout.EndVertical();
+
 
             GUI.DragWindow(new Rect(0, 0, 10000, 500));
         }
@@ -131,7 +119,7 @@ namespace AutoExecuteNode
 
         public static void SASInfos()
         {
-            var sas = VesselInfos.CurrentVessel().Autopilot.SAS;
+            var sas = VesselInfos.currentVessel().Autopilot.SAS;
             if (sas == null)
             {
                 GUILayout.Label("NO SAS");
@@ -142,20 +130,18 @@ namespace AutoExecuteNode
             GUILayout.Label($"sas.ReferenceFrame {sas.ReferenceFrame}");
             GUILayout.Label($"sas.AutoTune {sas.AutoTune}");
             GUILayout.Label($"sas.lockedMode {sas.lockedMode}");
-            GUILayout.Label($"sas.LockedRotation {Tools.print_vector(sas.LockedRotation.eulerAngles)}");
+            GUILayout.Label($"sas.LockedRotation {Tools.printVector(sas.LockedRotation.eulerAngles)}");
 
-            GUILayout.Label($"sas.TargetOrientation {Tools.print_vector(sas.TargetOrientation)}");
+            GUILayout.Label($"sas.TargetOrientation {Tools.printVector(sas.TargetOrientation)}");
             GUILayout.Label($"sas.PidLockedPitch {sas.PidLockedPitch}");
             GUILayout.Label($"sas.PidLockedRoll {sas.PidLockedRoll}");
             GUILayout.Label($"sas.PidLockedYaw {sas.PidLockedYaw}");
-
-            
 
         }
 
         void VesselInfo()
         {
-            var vehicle = VesselInfos.CurrentVehicle();
+            var vehicle = VesselInfos.currentVehicle();
 
             if (vehicle == null)
             {
@@ -172,12 +158,12 @@ namespace AutoExecuteNode
             GUILayout.Label($"LandedOrSplashed {vehicle.LandedOrSplashed}");
 
 
-            var body = VesselInfos.CurrentBody();
+            var body = VesselInfos.currentBody();
             var coord = body.coordinateSystem;
             var body_location = Rotation.Reframed(vehicle.Rotation, coord);
 
             GUILayout.Label($"coordinate_system {vehicle.Rotation.coordinateSystem}");
-            GUILayout.Label($"body_location {Tools.print_vector(body_location.localRotation.eulerAngles)}");
+            GUILayout.Label($"body_location {Tools.printVector(body_location.localRotation.eulerAngles)}");
 
             // GUILayout.Label($"AngularMomentum {Tools.print_vector(vehicle.AngularMomentum.vector)}");
         }
