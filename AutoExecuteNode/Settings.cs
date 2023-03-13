@@ -8,12 +8,10 @@ using Newtonsoft.Json;
 
 namespace AutoExecuteNode
 {
-
     public class AutoExecuteNodeSettings
     {
         public MainUI.InterfaceMode defaultMode = MainUI.InterfaceMode.ExeNode;
     }
-
 
     public class Settings
     {

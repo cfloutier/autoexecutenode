@@ -68,6 +68,8 @@ namespace AutoExecuteNode
         MainUI main_ui;
         AutoExecuteManeuver auto_execute_maneuver;
 
+        public static string mod_id;
+
         #endregion
 
         #region Main
@@ -80,6 +82,8 @@ namespace AutoExecuteNode
             }
 
             logger = BepInEx.Logging.Logger.CreateLogSource("AutoExecuteNode");
+
+            mod_id = SpaceWarpMetadata.ModID;
 
             loaded = true;
             instance = this;
