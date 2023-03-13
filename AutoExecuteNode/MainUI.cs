@@ -5,15 +5,42 @@ using BepInEx.Logging;
 
 namespace AutoExecuteNode
 {
+    public class Styles
+    {
+        private static bool guiLoaded = false;
+
+        public static GUIStyle box, errorStyle, warnStyle, peStyle, apStyle;
+        public static Color labelColor;
+
+        public static void Init()
+        {
+            if (!guiLoaded)
+            {
+                GetStyles();
+            }
+        }
+
+        public static void GetStyles()
+        {
+            if (box != null)
+                return;
+
+            box = GUI.skin.GetStyle("Box");
+            errorStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
+            warnStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
+            apStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
+            peStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
+            errorStyle.normal.textColor = Color.red;
+            warnStyle.normal.textColor = Color.yellow;
+            labelColor = GUI.skin.GetStyle("Label").normal.textColor;
+
+            guiLoaded = true;
+        }
+    }
 
     public class MainUI
     {
         public ManualLogSource logger;
-        private static bool guiLoaded = false;
-
-        private static GUIStyle boxStyle, errorStyle, warnStyle, peStyle, apStyle;
-
-        private static Color labelColor;
 
         #region interfaces modes
 
@@ -22,15 +49,15 @@ namespace AutoExecuteNode
 
         private InterfaceMode CurrentInterfaceMode
         {
-            get => AutoExecuteNode.settings.defaultMode;
+            get => Settings.settings.defaultMode;
             set
             {
-                if (value == AutoExecuteNode.settings.defaultMode) return;
+                if (value == Settings.settings.defaultMode) return;
                 // logger.LogInfo("Value is different to " + AutoExecuteNode.settings.defaultMode);
                 logger.LogInfo("InterfaceMode set " + value);
-                AutoExecuteNode.settings.defaultMode = value;
+                Settings.settings.defaultMode = value;
 
-                //AutoExecuteNode.Instance.SaveSetting();
+                Settings.Save();
             }
         }
 
@@ -44,13 +71,12 @@ namespace AutoExecuteNode
 
         public void onGui()
         {
-            if (!guiLoaded)
-                GetStyles();
+            Styles.Init();
 
             if (VesselInfos.currentVessel() == null)
             {
                 GUILayout.FlexibleSpace();
-                GUILayout.Label("No active vessel.", errorStyle);
+                GUILayout.Label("No active vessel.", Styles.errorStyle);
                 GUILayout.FlexibleSpace();
                 return;
             }
@@ -58,7 +84,7 @@ namespace AutoExecuteNode
             if (VesselInfos.currentBody() == null)
             {
                 GUILayout.FlexibleSpace();
-                GUILayout.Label("No active body.", errorStyle);
+                GUILayout.Label("No active body.", Styles.errorStyle);
                 GUILayout.FlexibleSpace();
 
                 return;
@@ -100,23 +126,6 @@ namespace AutoExecuteNode
             GUI.DragWindow(new Rect(0, 0, 10000, 500));
         }
 
-        private void GetStyles()
-        {
-            if (boxStyle != null)
-                return;
-
-            boxStyle = GUI.skin.GetStyle("Box");
-            errorStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
-            warnStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
-            apStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
-            peStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
-            errorStyle.normal.textColor = Color.red;
-            warnStyle.normal.textColor = Color.yellow;
-            labelColor = GUI.skin.GetStyle("Label").normal.textColor;
-
-            guiLoaded = true;
-        }
-
         public static void SASInfos()
         {
             var sas = VesselInfos.currentVessel().Autopilot.SAS;
@@ -136,7 +145,6 @@ namespace AutoExecuteNode
             GUILayout.Label($"sas.PidLockedPitch {sas.PidLockedPitch}");
             GUILayout.Label($"sas.PidLockedRoll {sas.PidLockedRoll}");
             GUILayout.Label($"sas.PidLockedYaw {sas.PidLockedYaw}");
-
         }
 
         void VesselInfo()

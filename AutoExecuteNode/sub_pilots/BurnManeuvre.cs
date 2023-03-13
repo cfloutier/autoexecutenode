@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AutoExecuteNode
 {
-    public class BurnManeuvre  : GenericPilot
+    public class BurnManeuvre  : BasePilot
     {
         public AutoExecuteManeuver parent;
 
@@ -13,7 +13,6 @@ namespace AutoExecuteNode
         {
             this.parent = parent;
         }
-
 
         public override void onUpdate()
         {
@@ -50,8 +49,7 @@ namespace AutoExecuteNode
 
         public override void onGui()
         {
-            GUILayout.Label("-- Burn --");
-
+            GUILayout.Label("Burn", Styles.box);
             GUILayout.Label(status_line);
 
             if (parent.debug_infos)

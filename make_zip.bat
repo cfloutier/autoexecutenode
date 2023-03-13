@@ -2,7 +2,7 @@ set PROJECT_NAME=AutoExecuteNode
 set CONFIG=Debug
 
 set OUTPUT=output
-set LOCAL_DIR=%OUTPUT%\%PROJECT_NAME%
+set LOCAL_DIR=%OUTPUT%\BepInEx\plugins\%PROJECT_NAME%
 
 set ZIP_File=%PROJECT_NAME%.zip
 
@@ -14,6 +14,8 @@ echo ####################### make zip #######################
 
 @REM create local dir
 if not exist %OUTPUT% mkdir %OUTPUT%
+if not exist %OUTPUT%\BepInEx mkdir %OUTPUT%\BepInEx
+if not exist %OUTPUT%\BepInEx\plugins mkdir %OUTPUT%\BepInEx\plugins
 
 rd /s/q %LOCAL_DIR%
 
@@ -35,7 +37,7 @@ del %ZIP_File%
 
 cd %OUTPUT%
 
-"C:\Program Files\7-Zip\7z.exe" a %ZIP_File% %PROJECT_NAME%
+"C:\Program Files\7-Zip\7z.exe" a %ZIP_File% BepInEx
 
 cd %CWD%
 

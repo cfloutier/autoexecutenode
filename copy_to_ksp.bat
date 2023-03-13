@@ -3,7 +3,7 @@ set PROJECT_NAME=AutoExecuteNode
 set CONFIG=Debug
 
 set OUTPUT=output
-set LOCAL_DIR=%OUTPUT%\%PROJECT_NAME%
+set LOCAL_DIR=%OUTPUT%\BepInEx\plugins\%PROJECT_NAME%
 
 @REM create local dir
 if not exist %OUTPUT% (

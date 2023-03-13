@@ -78,7 +78,9 @@
     <Compile Include="My_Plugin.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="MainUI.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="AutoExecuteManeuver.cs" />
+    <Compile Include="sub_pilots\BasePilot.cs" />
     <Compile Include="sub_pilots\TurnToManeuvre.cs" />
     <Compile Include="sub_pilots\WarpToManeuvre.cs" />
     <Compile Include="sub_pilots\BurnManeuvre.cs" />

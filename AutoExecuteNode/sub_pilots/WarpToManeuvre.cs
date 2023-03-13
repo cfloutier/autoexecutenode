@@ -17,7 +17,7 @@ using KSP.ScriptInterop.impl.moonsharp;
 
 namespace AutoExecuteNode
 {
-    public class WarpToManeuvre : GenericPilot
+    public class WarpToManeuvre : BasePilot
     {
         public AutoExecuteManeuver parent;
 
@@ -49,7 +49,8 @@ namespace AutoExecuteNode
             wanted_warp_index = compute_wanted_warp_index(dt);
             float wanted_rate = TimeWarpTools.indexToRatio(wanted_warp_index);
 
-            status_line = $"TimeWarp to x{wanted_rate}";
+            status_line = $"{Tools.printDuration(dt)} | x{wanted_rate}";
+
             if (time_warp.CurrentRateIndex != wanted_warp_index)
                 time_warp.SetRateIndex(wanted_warp_index, true);
 
@@ -61,7 +62,7 @@ namespace AutoExecuteNode
 
         int compute_wanted_warp_index(double dt)
         {
-            double factor = 10;
+            double factor = 20;
             double ratio = dt / factor;
 
             return TimeWarpTools.ratioToIndex((float)ratio);

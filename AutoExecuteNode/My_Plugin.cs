@@ -5,9 +5,7 @@ using System.IO;
 using System.Reflection;
 
 using UnityEngine;
-using Newtonsoft.Json;
 
-using KSP.Sim.impl;
 using KSP.Game;
 using KSP.Sim.ResourceSystem;
 using KSP.UI.Binding;
@@ -50,8 +48,6 @@ namespace AutoExecuteNode
 
 
         public ManualLogSource logger;
-
-
         // GUI.
 
         private bool drawUI = false;
@@ -94,6 +90,7 @@ namespace AutoExecuteNode
             logger.LogMessage("building AutoExecuteManeuver");
             auto_execute_maneuver = new AutoExecuteManeuver(logger);
             main_ui = new MainUI(logger);
+            Settings.Init(SettingsPath, logger);
 
             Appbar.RegisterAppButton(
                 "TEST",
@@ -105,7 +102,6 @@ namespace AutoExecuteNode
         void Awake()
         {
             windowRect = new Rect((Screen.width * 0.7f) - (windowWidth / 2), (Screen.height / 2) - (windowHeight / 2), 0, 0);
-            LoadSettings();
         }
 
         void Update()
@@ -156,32 +152,7 @@ namespace AutoExecuteNode
             GUILayout.EndVertical();
         }
 
-        #region Settings
-
-        public static AutoExecuteNodeSettings settings { get; set; }
-
-        public void SaveSetting()
-        {
-            File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(settings));
-        }
-
-        private void LoadSettings()
-        {
-            try
-            {
-                settings = JsonConvert.DeserializeObject<AutoExecuteNodeSettings>(File.ReadAllText(SettingsPath));
-            }
-            catch (FileNotFoundException)
-            {
-                settings = new AutoExecuteNodeSettings();
-            }
-        }
-
-        #endregion
+     
     }
 
-    public class AutoExecuteNodeSettings
-    {
-        public MainUI.InterfaceMode defaultMode = MainUI.InterfaceMode.ExeNode;
-    }
 }

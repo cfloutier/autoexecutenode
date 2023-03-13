@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+
 using System.Linq;
 
 using UnityEngine;
@@ -17,7 +18,7 @@ using KSP.ScriptInterop.impl.moonsharp;
 
 namespace AutoExecuteNode
 {
-    public class TurnToManeuvre : GenericPilot
+    public class TurnToManeuvre : BasePilot
     {
         public AutoExecuteManeuver parent;
 
@@ -25,6 +26,8 @@ namespace AutoExecuteNode
         {
             this.parent = parent;
         }
+
+        Vector3 maneuvre_dir = Vector3.zero;
 
         public override void Start()
         {
@@ -37,70 +40,98 @@ namespace AutoExecuteNode
         {
             finished = false;
 
-            var autopilot = SASInfos.currentAutoPilot();
-            if (autopilot == null)
-                return;
-            if (autopilot.AutopilotMode != AutopilotMode.Maneuver)
-                autopilot.AutopilotMode = AutopilotMode.Maneuver;
+            // var autopilot = SASInfos.currentAutoPilot();
+            // if (autopilot == null)
+            //     return;
 
-            var sas = autopilot.SAS;
-            var pc_sas = SASInfos.getSasResponsePC();
+            // if (autopilot.AutopilotMode != AutopilotMode.Maneuver)
+            //     autopilot.AutopilotMode = AutopilotMode.Maneuver;
 
-            double max_angle = 0.5;
-            double max_angular_speed = 2;
+            // if (!autopilot.Enabled)
+            //     autopilot.Enabled = true;
 
-            status_line = "Waiting for good sas direction";
+            // var sas = autopilot.SAS;
+            // var pc_sas = SASInfos.getSasResponsePC();
 
-            var delta_angle = SASInfos.geSASAngularDelta();
-            if (System.Math.Abs(delta_angle.x) > max_angle)
+            if (!checkManeuvreDirection())
                 return;
 
-            if (System.Math.Abs(delta_angle.y) > max_angle)
+            if (!checkAngularRotation())
                 return;
 
-            if (System.Math.Abs(delta_angle.z) > max_angle)
-                return;
-
-            var angular_rotation_pc = VesselInfos.GetRotatingPC();
-
-            status_line = "Waiting for rotation stabilisation";
-
-            if (angular_rotation_pc > max_angular_speed)
-                return;
-
-            status_line = "ok";
-
+            status_line = "Ready !";
             finished = true;
         }
 
+        public bool checkManeuvreDirection()
+        {
+            double max_angle = 1;
+
+            var telemetry = SASInfos.getTelemetry();
+            if (!telemetry.HasManeuver)
+                return false;
+
+            // 
+            Vector maneuvre_dir = telemetry.ManeuverDirection;
+            Rotation vessel_rotation = VesselInfos.GetRotation();
+
+            // convert rotation to maneuvre coordinates
+            vessel_rotation = Rotation.Reframed(vessel_rotation, maneuvre_dir.coordinateSystem);
+            Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
+
+            double angle = Vector3d.Angle(maneuvre_dir.vector, forward_direction);
+            status_line = $"Waiting for good sas direction, angle = {angle}°";
+
+            return angle < max_angle;
+        }
+
+        public bool checkAngularRotation()
+        {
+            double max_angular_speed = 2;
+
+            var angular_rotation_pc = VesselInfos.GetAngularSpeed().vector;
+
+            status_line = "Waiting for stabilisation";
+            if (System.Math.Abs(angular_rotation_pc.x) > max_angular_speed)
+                return false;
+
+            if (System.Math.Abs(angular_rotation_pc.y) > max_angular_speed)
+                return false;
+
+            if (System.Math.Abs(angular_rotation_pc.z) > max_angular_speed)
+                return false;
+
+            return true;
+        }
+
+
         public override void onGui()
         {
-            GUILayout.Label("-- Turn GUI --");
-
-            var autopilot = VesselInfos.currentVessel().Autopilot;
-            var sas = autopilot.SAS;
-
-
-            var pc_sas = SASInfos.getSasResponsePC();
-            var delta_angle = SASInfos.geSASAngularDelta();
-
-            // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;
-            var angularVelocity = VesselInfos.GetAngularSpeed().vector;
-            var angular_rotation_pc = VesselInfos.GetRotatingPC();
+            GUILayout.Label("Turn", Styles.box);
 
             // GUILayout.Label($"sas.sas_response v {Tools.print_vector(sas_response)}");
 
             if (parent.debug_infos)
             {
-                GUILayout.Label($"pc_sas {pc_sas}");
+                var telemetry = SASInfos.getTelemetry();
+                if (!telemetry.HasManeuver)
+                    return;
 
-                GUILayout.Label($"delta_angle {Tools.printVector(delta_angle)}");
-                GUILayout.Label($"delta_angle mag {delta_angle.magnitude}");
+                var autopilot = VesselInfos.currentVessel().Autopilot;
+                // var sas = autopilot.SAS;
+
+                // var angulor_vel_coord = VesselInfos.GetAngularSpeed().coordinateSystem;
+                var angularVelocity = VesselInfos.GetAngularSpeed().vector;
 
                 // GUILayout.Label($"angulor_vel_coord {angulor_vel_coord}");
-                GUILayout.Label($"angularVelocity {Tools.printVector(angularVelocity)}");
-                GUILayout.Label($"angular_rotation_pc {angular_rotation_pc}");
+                Vector maneuvre_dir = telemetry.ManeuverDirection;
+                GUILayout.Label($"maneuvre_dir ref {maneuvre_dir.coordinateSystem}");
+                GUILayout.Label($"maneuvre_dir {Tools.printVector(maneuvre_dir.vector)}");
 
+
+                GUILayout.Label($"angularVelocity {Tools.printVector(angularVelocity)}");
+
+                GUILayout.Label($"angularVelocity {Tools.printVector(angularVelocity)}");
                 GUILayout.Label($"autopilot {autopilot.AutopilotMode}");
 
                 if (GUILayout.Button("Force SaS"))

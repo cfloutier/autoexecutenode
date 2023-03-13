@@ -10,26 +10,6 @@ using BepInEx.Logging;
 
 namespace AutoExecuteNode
 {
-    public class GenericPilot
-    {
-        public bool finished = false;
-        public string status_line = "";
-
-        public virtual void Start()
-        {
-            finished = false;
-        }
-
-        public virtual void onUpdate()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public virtual void onGui()
-        {
-            throw new System.NotImplementedException();
-        }
-    }
 
     public class AutoExecuteManeuver
     {
@@ -44,7 +24,7 @@ namespace AutoExecuteNode
         WarpToManeuvre warp;
         BurnManeuvre burn;
 
-        GenericPilot current_pilot = null;
+        BasePilot current_pilot = null;
 
         public AutoExecuteManeuver(ManualLogSource logger)
         {
@@ -139,12 +119,12 @@ namespace AutoExecuteNode
 
             if (mode == Mode.Off)
             {
-                if (GUILayout.Button("Run"))
+                if (GUILayout.Button("Run", GUILayout.Height(40)))
                     Run();
             }
             else
             {
-                if (GUILayout.Button("Stop !!!"))
+                if (GUILayout.Button("Stop !!!", GUILayout.Height(40)))
                     Stop();
             }
 
@@ -187,7 +167,6 @@ namespace AutoExecuteNode
 
         void node_infos()
         {
-
             if (debug_infos)
             {
                 var dt = Tools.remainingStartTime(current_maneuvre_node);
@@ -201,6 +180,13 @@ namespace AutoExecuteNode
                 GUILayout.Label($"BurnDuration {current_maneuvre_node.BurnDuration}");
                 GUILayout.Label($"BurnRequiredDV {current_maneuvre_node.BurnRequiredDV}");
                 GUILayout.Label($"BurnVector {Tools.printVector(current_maneuvre_node.BurnVector)}");
+
+                var telemetry = SASInfos.getTelemetry();
+
+                Vector3 maneuvre_dir = telemetry.ManeuverDirection.vector;
+
+
+                GUILayout.Label($"maneuvre_dir {Tools.printVector(maneuvre_dir)}");
             }
 
             //GUILayout.Label($"Time {nextNode.Time}");

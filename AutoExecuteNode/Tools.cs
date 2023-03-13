@@ -161,6 +161,16 @@ namespace AutoExecuteNode
             var my_obj = Reflex.GetInstanceField(typeof(VesselSAS), currentSas(), "angularDelta");
             return Tools.correctEuler(((Vector3d)  my_obj));
         }
+
+        public static TelemetryComponent getTelemetry()
+        {
+            if (currentAutoPilot() == null)
+                return null;
+
+            var my_obj = Reflex.GetInstanceField(typeof(VesselAutopilot), currentAutoPilot(), "_telemetry");
+            return my_obj as TelemetryComponent;
+        }
+
     }
 
 
@@ -196,15 +206,18 @@ namespace AutoExecuteNode
             active_Vehicle.AtomicSet(update);
         }
 
+
+
         public static Vector GetAngularSpeed()
         {
             var active_Vehicle = currentVehicle();
             return active_Vehicle.AngularVelocity.relativeAngularVelocity;
         }
 
-        public static double GetRotatingPC()
+        public static Rotation GetRotation()
         {
-            return GetAngularSpeed().magnitude * 100;
+            var active_Vehicle = currentVehicle();
+            return active_Vehicle.VehicleTelemetry.Rotation;
         }
     }
 
