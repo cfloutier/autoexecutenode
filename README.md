@@ -1,16 +1,27 @@
 # Auto Execute Maneuvre Node
 
-The first tool of the C.O.S.M.A.T : Computerized Onboard Spacecraft Mission Assistance Toolbox
-
 This is my first plugin into ksp2. For the moment it only execute the next maneuvre node.
+The UI can be opened using `Alt-O` or using AppBar.
+
 There is no use of the SAS for the moment (very early version). The pilot, wait for a good pointing, do auto-warp and auto-burn.
 
-All of those phase must be enhanced. It's quite working bettern tahn I can do by hand but could me more precise. especially the burnign phase. there is always some small amount of dv Missing...
+All of those phase must be enhanced. It's quite working better than I can do by hand. But could me more precise. Especially the burning phase. There is always some small amount of dv Missing... It's based on Burn Duration of the Node.
 
- I would like to make more of them in the future :
+# Next
+
+* We could stop burning if the atitude of the vessel is out of the node direction.
+* Options page
+* SAS use or another way to point in the node direction (SMART SAS like mechjeb ??)
+
+# Future ?
+
+This could be the first tool of a more large set of small navigation Toolbox.
+I would like to make more of them in the future :
 - Docking and Rendez vous assistant.
 - Auto Landing and , kill vertical or horizontal speed
 - Auto Ascent.
+
+But this plan should change depending on my skill and motivation.
 
 # Installation
 
@@ -25,6 +36,8 @@ https://spacedock.info/mod/3257/Space%20Warp
 Download Auto Execute Node, open the zip file, and drag the included `BepInEx` folder into the game folder. (merge folders when asked)
 
 # Thanks to
+
+Thanks first for downloading.
 
 * Big Thanks to [cheese3660](https://github.com/cheese3660)
 1. for [SpaceWarp](https://github.com/Halbann). the base of all KSP2 MODs we can make for now on

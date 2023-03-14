@@ -37,7 +37,7 @@ namespace COSMAT
             }
             else if (dt < 0)
             {
-                status_line = $"end in {Tools.printDuration(end_dt)}";
+                status_line = $"burning, end in {Tools.printDuration(end_dt)}";
                 VesselInfos.SetThrottle(1);
             }
             else
@@ -49,8 +49,9 @@ namespace COSMAT
 
         public override void onGui()
         {
-            GUILayout.Label("Burn", Styles.box);
-            GUILayout.Label(status_line);
+
+            GUILayout.Label("Burn !", Styles.phase_ok);
+            GUILayout.Label(status_line, Styles.console);
 
             if (parent.debug_infos)
             {

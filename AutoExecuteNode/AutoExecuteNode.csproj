@@ -82,6 +82,7 @@
     <Compile Include="My_Plugin.cs" />
 
     <Compile Include="MainUI.cs" />
+    <Compile Include="Styles.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="AutoExecuteManeuver.cs" />
     <Compile Include="sub_pilots\BasePilot.cs" />

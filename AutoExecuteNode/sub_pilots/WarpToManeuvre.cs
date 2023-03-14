@@ -43,7 +43,7 @@ namespace COSMAT
             status_line = $"{Tools.printDuration(dt)} | x{wanted_rate}";
 
             if (time_warp.CurrentRateIndex != wanted_warp_index)
-                time_warp.SetRateIndex(wanted_warp_index, true);
+                time_warp.SetRateIndex(wanted_warp_index, false);
 
             if (dt < 10)
             {
@@ -53,7 +53,7 @@ namespace COSMAT
 
         int compute_wanted_warp_index(double dt)
         {
-            double factor = 20;
+            double factor = 5;
             double ratio = dt / factor;
 
             return TimeWarpTools.ratioToIndex((float)ratio);
@@ -61,7 +61,8 @@ namespace COSMAT
 
         public override void onGui()
         {
-            GUILayout.Label("-- Warp --");
+            GUILayout.Label("Time Warp", Styles.phase_ok);
+            GUILayout.Label(status_line, Styles.console);
 
             if (time_warp == null) return;
 
@@ -72,10 +73,6 @@ namespace COSMAT
                 GUILayout.Label($"index_rate x{TimeWarpTools.indexToRatio(time_warp.CurrentRateIndex)}");
                 GUILayout.Label($"finished {finished}");
             }
-
-            GUILayout.Label(status_line);
         }
     }
-
-
 }

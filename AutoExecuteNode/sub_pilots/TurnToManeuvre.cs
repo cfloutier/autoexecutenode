@@ -40,19 +40,6 @@ namespace COSMAT
         {
             finished = false;
 
-            // var autopilot = SASInfos.currentAutoPilot();
-            // if (autopilot == null)
-            //     return;
-
-            // if (autopilot.AutopilotMode != AutopilotMode.Maneuver)
-            //     autopilot.AutopilotMode = AutopilotMode.Maneuver;
-
-            // if (!autopilot.Enabled)
-            //     autopilot.Enabled = true;
-
-            // var sas = autopilot.SAS;
-            // var pc_sas = SASInfos.getSasResponsePC();
-
             if (!checkManeuvreDirection())
                 return;
 
@@ -80,7 +67,7 @@ namespace COSMAT
             Vector3d forward_direction = (vessel_rotation.localRotation * Vector3.up).normalized;
 
             double angle = Vector3d.Angle(maneuvre_dir.vector, forward_direction);
-            status_line = $"Waiting for good sas direction, angle = {angle}°";
+            status_line = $"Waiting for good sas direction\nAngle = {angle:n2}°";
 
             return angle < max_angle;
         }
@@ -107,7 +94,8 @@ namespace COSMAT
 
         public override void onGui()
         {
-            GUILayout.Label("Turn", Styles.box);
+            GUILayout.Label("Check Attitude", Styles.phase_ok);
+            GUILayout.Label(status_line, Styles.console);
 
             // GUILayout.Label($"sas.sas_response v {Tools.print_vector(sas_response)}");
 
@@ -140,7 +128,7 @@ namespace COSMAT
                 GUILayout.Label($"finished {finished}");
             }
 
-            GUILayout.Label(status_line);
+            
         }
     }
 

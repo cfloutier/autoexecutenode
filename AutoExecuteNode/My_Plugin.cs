@@ -72,7 +72,6 @@ namespace COSMAT
 
         #endregion
 
-        #region Main
 
         public override void OnInitialized()
         {
@@ -96,8 +95,10 @@ namespace COSMAT
             main_ui = new MainUI(logger);
             Settings.Init(SettingsPath, logger);
 
+
             Appbar.RegisterAppButton(
-                "TEST",
+                // "C.O.S.M.A.T",
+                "Auto-Node",
                 "BTN-AutoExecuteNodeButton",
                 AssetManager.GetAsset<Texture2D>($"{SpaceWarpMetadata.ModID}/images/icon.png"),
                 ToggleButton);
@@ -112,7 +113,7 @@ namespace COSMAT
         {
             if (ValidScene())
             {
-                if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.D) )
+                if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.O) )
                     ToggleButton(!drawUI);
 
                 if (auto_execute_maneuver != null)
@@ -124,13 +125,17 @@ namespace COSMAT
         {
             if (drawUI && ValidScene())
             {
+
                 GUI.skin = Skins.ConsoleSkin;
+                Styles.Init();
 
                 windowRect = GUILayout.Window(
                     GUIUtility.GetControlID(FocusType.Passive),
                     windowRect,
                     FillWindow,
-                    "<color=#696DFF>TEST</color>",
+                    // "<color=#00D346>C.O.S.M.A.T</color>",
+                    "<color=#00D346>Auto-Node</color>",
+                    Styles.window,
                     GUILayout.Height(0),
                     GUILayout.Width(350));
             }
@@ -142,21 +147,18 @@ namespace COSMAT
             GameObject.Find("BTN-AutoExecuteNodeButton")?.GetComponent<UIValue_WriteBool_Toggle>()?.SetValue(toggle);
         }
 
-        #endregion
 
         private void FillWindow(int windowID)
         {
             GUILayout.BeginVertical();
 
-            if (GUI.Button(new Rect(windowRect.width - 18, 2, 16, 16), "X"))
+            if (GUI.Button(new Rect(windowRect.width - 30, 4, 25, 25), "X", Styles.small_button))
                 ToggleButton(false);
 
             main_ui.onGui();
 
             GUILayout.EndVertical();
         }
-
-     
     }
 
 }

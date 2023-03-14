@@ -68,14 +68,16 @@ namespace COSMAT
 
             if (mode == Mode.Off)
             {
-                TimeWarpTools.time_warp()?.SetRateIndex(0, true);
+                TimeWarpTools.time_warp()?.SetRateIndex(0, false);
                 current_pilot = null;
                 return;
             }
 
             switch (mode)
             {
-                case Mode.Off: return;
+                case Mode.Off:
+                    current_pilot = null;
+                    break;
                 case Mode.Turn:
                     current_pilot = turn;
                     break;
@@ -90,6 +92,20 @@ namespace COSMAT
             logger.LogInfo("current_pilot " + current_pilot);
 
             current_pilot.Start();
+        }
+
+        public bool canStart()
+        {
+            if (current_maneuvre_node == null)
+                return false;
+
+            var dt = Tools.remainingStartTime(current_maneuvre_node);
+            if (dt < 0)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void nextMode()
@@ -119,16 +135,23 @@ namespace COSMAT
 
             if (mode == Mode.Off)
             {
-                if (GUILayout.Button("Run", GUILayout.Height(40)))
+                if (!canStart())
+                {
+                    GUILayout.Button("Run", Styles.button, GUILayout.Height(40));
+                    GUILayout.Label("no Maneuver none in the future");
+                    return;
+                }
+
+                if (GUILayout.Button("Run", Styles.button, GUILayout.Height(40)))
                     Run();
             }
             else
             {
-                if (GUILayout.Button("Stop !!!", GUILayout.Height(40)))
+                if (GUILayout.Button("Stop !!!", Styles.button_on, GUILayout.Height(40)))
                     Stop();
             }
 
-            debug_infos = GUILayout.Toggle(debug_infos, "debug mode");
+            //debug_infos = GUILayout.Toggle(debug_infos, "debug mode");
 
             node_infos();
 
@@ -142,8 +165,6 @@ namespace COSMAT
                         nextMode();
                 }
             }
-            else
-                GUILayout.Label("No current pilot");
         }
 
         public void Update()
