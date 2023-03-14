@@ -3,19 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
-
-using KSP.Sim;
 using KSP.Sim.impl;
 using KSP.Sim.Maneuver;
-using KSP.Game;
-using KSP.Sim.ResourceSystem;
 
-
-
-using BepInEx.Logging;
-using KSP.ScriptInterop.impl.moonsharp;
-
-namespace AutoExecuteNode
+namespace COSMAT
 {
     public class WarpToManeuvre : BasePilot
     {

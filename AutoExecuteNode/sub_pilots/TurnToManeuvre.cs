@@ -16,7 +16,7 @@ using KSP.Sim.ResourceSystem;
 using BepInEx.Logging;
 using KSP.ScriptInterop.impl.moonsharp;
 
-namespace AutoExecuteNode
+namespace COSMAT
 {
     public class TurnToManeuvre : BasePilot
     {

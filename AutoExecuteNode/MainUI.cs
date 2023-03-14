@@ -4,7 +4,7 @@ using KSP.Sim;
 using BepInEx.Logging;
 using SpaceWarp.API.Assets;
 
-namespace AutoExecuteNode
+namespace COSMAT
 {
     public class Styles
     {
@@ -38,7 +38,7 @@ namespace AutoExecuteNode
 
                 // Print the full path of the resource
                 Debug.Log("Full resource path: " + Application.dataPath + "/" + path);
-
+                 
                 // Print the type of resource that was expected
                 Debug.Log("Expected resource type: Texture2D");
             }

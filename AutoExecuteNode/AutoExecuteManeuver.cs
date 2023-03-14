@@ -8,7 +8,7 @@ using KSP.Messages;
 using BepInEx.Logging;
 
 
-namespace AutoExecuteNode
+namespace COSMAT
 {
 
     public class AutoExecuteManeuver

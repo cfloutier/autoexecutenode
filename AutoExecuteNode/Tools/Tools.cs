@@ -1,24 +1,13 @@
 using System;
-using System.Collections.Generic;
-using BepInEx;
-using KSP;
-using KSP.Messages;
 using KSP.Sim;
 using KSP.Sim.impl;
 using KSP.Sim.Maneuver;
 using KSP.Sim.State;
 using KSP.Game;
-using KSP.UI.Binding;
-using SpaceWarp;
-using SpaceWarp.API.Assets;
-using SpaceWarp.API.Mods;
-using SpaceWarp.API.UI.Appbar;
-using UnityEngine;
 
 using System.Reflection;
 
-
-namespace AutoExecuteNode
+namespace COSMAT
 {
     public class Tools
     {

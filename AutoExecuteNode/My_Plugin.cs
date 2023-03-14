@@ -19,7 +19,7 @@ using SpaceWarp.API.UI;
 using SpaceWarp.API.UI.Appbar;
 using BepInEx.Logging;
 
-namespace AutoExecuteNode
+namespace COSMAT
 {
     [BepInDependency(SpaceWarpPlugin.ModGuid,SpaceWarpPlugin.ModVer)]
     [BepInPlugin(ModGuid, ModName, ModVer)]

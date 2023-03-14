@@ -6,7 +6,7 @@ using System.Reflection;
 using BepInEx.Logging;
 using Newtonsoft.Json;
 
-namespace AutoExecuteNode
+namespace COSMAT
 {
     public class AutoExecuteNodeSettings
     {

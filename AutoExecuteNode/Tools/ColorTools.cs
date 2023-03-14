@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Globalization;
 
-namespace AutoExecuteNode
+namespace COSMAT
 {
     /// <summary>
     /// A set of simple tools for colors that is missing in the main unity API
@@ -11,7 +11,7 @@ namespace AutoExecuteNode
     public class ColorTools
     {
         /// <summary>
-        /// Convert a HSV color from rgb Color values. 
+        /// Convert a HSV color from rgb Color values.
         /// </summary>
         public static void ToHSV(Color col, out float h, out float s, out float v)
         {
