@@ -1,17 +1,19 @@
 # Auto Execute Maneuvre Node
 
-This is my first plugin into ksp2. For the moment it only execute the next maneuvre node.
+Simply execute the next maneuvre node.
 The UI can be opened using `Alt-O` or using AppBar.
 
-There is no use of the SAS for the moment (very early version). The pilot, wait for a good pointing, do auto-warp and auto-burn.
+There is no use of the SAS for the moment (very early version). The pilot, wait for a good pointing attitude, do auto-warp and then auto-burn.
 
-All of those phase must be enhanced. It's quite working better than I can do by hand. But could me more precise. Especially the burning phase. There is always some small amount of dv Missing... It's based on Burn Duration of the Node.
+All of those phases must be enhanced.
+It's working better than I can do by hand. But could me more precise. Especially the burning phase. There is always some small amount of dv Missing... It's based on Burn Duration of the Node and this is not perfect.
 
 # Next
 
+* Burn based on real dv
 * We could stop burning if the atitude of the vessel is out of the node direction.
-* Options page
 * SAS use or another way to point in the node direction (SMART SAS like mechjeb ??)
+* Options page ?
 
 # Future ?
 
